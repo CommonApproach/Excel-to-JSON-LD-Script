@@ -84,8 +84,6 @@ def load_indicators(input_path='./data/input.xlsx'):
     # theme = None
     indicators = []
     for idx, row in df.iloc[indicator_row_i:].iterrows():
-        # if idx != sdg_indicator_row_i:
-
         if not pd.isnull(row['IndicatorURI']):
             indicator_id = resolve_nm(row['IndicatorURI'])
             indicator_name = row['Indicator Names']
@@ -107,6 +105,7 @@ def load_indicators(input_path='./data/input.xlsx'):
                     measure = get_instance(klass='i72.Measure')
                     if not pd.isnull(row.get('Unit_of_measure')): measure[mappings['Indicator']['Unit_of_measure']] = row['Unit_of_measure']
                     measure['i72.numerical_value'] = row[col]
+                    indicator_report['i72.value'].append(measure)
                     indicator['cids.hasIndicatorReport'].append(indicator_report['ID'])
             impact_reports = []
             for col in indicator_target_cols:

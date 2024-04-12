@@ -2,6 +2,8 @@ import os
 LOG_FILE = f"./logs/logs.txt"    # Log file used to log errors or warnings that should not stop the processing (e.g. invalid address is found)
 if os.path.exists(LOG_FILE):
     os.remove(LOG_FILE)
+if not os.path.exists('./output/'):
+    os.makedirs('./output/')
 
 INPUT_FILE = './data/ExceltoJSONTemplate.xlsx'
 CIDS_URL = 'http://ontology.commonapproach.org/owl/cids_v2.1.owl'
