@@ -8,7 +8,7 @@ if not os.path.exists('./output/'):
 INPUT_FILE = './data/ExceltoJSONTemplate.xlsx'
 CIDS_URL = 'http://ontology.commonapproach.org/owl/cids_v2.1.owl'
 CONTEXT_PATH = "https://ontology.commonapproach.org/contexts/cidsContext.json"
-REPLACE_PREFIX = 'none' # options: 'context_only', 'label_only', 'all', 'none'
+REPLACE_PREFIX = 'context_only' # options: 'context_only', 'label_only', 'all', 'none'
 
 from .utils.contexts import load_context_mapping
 MAPPING_CONTEXT, _ = load_context_mapping(path=CONTEXT_PATH)

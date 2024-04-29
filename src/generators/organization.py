@@ -28,7 +28,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
         klass = 'cids.LogicModel',
         props = {
             'ID'            : f'{base_uri}/main-impactmodel',
-            'org.hasName'   : 'Impact Model',
+            'cids.hasName'   : 'Impact Model',
         }
     )
     organization['cids.hasImpactModel'].append(im['ID'])
@@ -37,7 +37,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
         klass = 'cids.Program',
         props = {
             'ID'            : f'{base_uri}/loan-program',
-            'org.hasName'   : 'Loans Program'
+            'cids.hasName'   : 'Loans Program'
         }
     )
     im['cids.hasProgram'].append(program['ID'])
@@ -46,7 +46,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
         klass = 'cids.Service',
         props = {
             'ID'            : f'{base_uri}/loan-service',
-            'org.hasName'   : 'Loans Service'
+            'cids.hasName'   : 'Loans Service'
         }
     )
     program['cids.hasService'].append(service['ID'])
@@ -58,7 +58,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
             klass = 'cids.Actvity',
             props = {
                 'ID'            : f'{base_uri}/loan-application-review',
-                'org.hasName'   : 'Loans Application review',
+                'cids.hasName'   : 'Loans Application review',
             }
         )
     activity['act.subActivityOf'].append(service['ID'])
@@ -70,7 +70,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
             klass = 'cids.Service',
             props = {
                 'ID'            : f'{base_uri}/loan-application-review-output',
-                'org.hasName'   : 'Loan Applcation Review Output'
+                'cids.hasName'   : 'Loan Applcation Review Output'
             }
         )
     activity['cids.hasOutput'].append(output['ID'])

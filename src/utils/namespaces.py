@@ -82,7 +82,7 @@ for prefix, url in namespaces.items():
 # usage in uti;l.save_db() and util.row_to_turtle()
 prop_ranges_preset = {
     cids.hasDescription:[str],
-    org.hasName:[str],
+    cids.hasName:[str],
     org.hasLegalName:[str],
     sch.description:[str],
     dcterms.description:[str],
@@ -95,7 +95,6 @@ prop_ranges_preset = {
     org.hasIdentifier:[str],
     ic.hasEmail:[str],
     ic.hasPostalBox:[str],
-    # ic.hasUnitNumber:[str],
     ic.hasPhoneDescription:[str],
     dcat.Dataset:[str],
 }

@@ -10,21 +10,21 @@ mappings = {
     },
     'Indicator' : {
         'ID'                : 'ID',
-        'Name'              : 'org.hasName',
-        'Description'       : 'org.hasDescription',
+        'Name'              : 'cids.hasName',
+        'Description'       : 'cids.hasDescription',
         'Unit_of_measure'   : 'i72.hasUnit',
         'Base'              : 'cids.hasBaseline',
         'usesOutput'        : 'cids.usesOutput',
     },
     'Theme'     : {
         'ID'                : 'ID',
-        'Name'              : 'org.hasName',
-        'Description'       : 'org.hasDescription',
+        'Name'              : 'cids.hasName',
+        'Description'       : 'cids.hasDescription',
     },
     'Outcome'   : {
         'ID'                : 'ID',
-        'Name'              : 'org.hasName',
-        'Description'       : 'org.hasDescription',
+        'Name'              : 'cids.hasName',
+        'Description'       : 'cids.hasDescription',
         'ForTheme'          : 'cids.forTheme',
     },
     'Organization'    : {
@@ -33,14 +33,14 @@ mappings = {
     },
     'Activity'      : {
         'ID'                : 'ID',
-        'Name'              : 'org.hasName',
-        'Description'       : 'org.hasDescription',
+        'Name'              : 'cids.hasName',
+        'Description'       : 'cids.hasDescription',
         'hasOutput'         : 'cids.hasOutput',
     },
     'Output'    : {
         'ID'                : 'ID',
-        'Name'              : 'org.hasName',
-        'Description'       : 'org.hasDescription',
+        'Name'              : 'cids.hasName',
+        'Description'       : 'cids.hasDescription',
         'UsedbyIndicator'   : 'cids.usedByIndicator',
     }
 }
@@ -88,7 +88,7 @@ def load_indicators(input_path='./data/input.xlsx'):
             indicator_id = resolve_nm(row['IndicatorURI'])
             indicator_name = row['Indicator Names']
 
-            indicator = get_instance(klass='cids.Indicator', props={'ID':indicator_id, 'org.hasName':indicator_name})
+            indicator = get_instance(klass='cids.Indicator', props={'ID':indicator_id, 'cids.hasName':indicator_name})
             if not pd.isnull(row.get('Base')):
                 base_measure = get_instance(klass='i72.Measure')
                 base_measure['i72.numerical_value'] = row.get('Base')
@@ -100,8 +100,8 @@ def load_indicators(input_path='./data/input.xlsx'):
             for col in indicator_value_cols:
                 if col+'.1' in row.index and not pd.isnull(row[col]):
                     indicator_report_id = resolve_nm(row[col+'.1'])
-                    indicator_report_name = f"{indicator['org.hasName']} for {col}"
-                    indicator_report = get_instance(klass='cids.IndicatorReport', props={'ID':indicator_report_id, 'org.hasName':indicator_report_name})
+                    indicator_report_name = f"{indicator['cids.hasName']} for {col}"
+                    indicator_report = get_instance(klass='cids.IndicatorReport', props={'ID':indicator_report_id, 'cids.hasName':indicator_report_name})
                     measure = get_instance(klass='i72.Measure')
                     if not pd.isnull(row.get('Unit_of_measure')): measure[mappings['Indicator']['Unit_of_measure']] = row['Unit_of_measure']
                     measure['i72.numerical_value'] = row[col]
@@ -115,7 +115,7 @@ def load_indicators(input_path='./data/input.xlsx'):
                     measure['i72.numerical_value'] = resolve_nm(row[col])
                     impact_report_id = resolve_nm(f"{base_uri}/ImpactReport/{row['ShortCode']}_{col}")
                     impact_report_name = f"{row['ShortCode']} for {col}".replace('_', ' ')
-                    impact_report = get_instance(klass='cids.ImpactReport', props={'ID':impact_report_id, 'org.hasName': impact_report_name})
+                    impact_report = get_instance(klass='cids.ImpactReport', props={'ID':impact_report_id, 'cids.hasName': impact_report_name})
                     impact_report['cids.hasExpectation'].append(measure)
                     impact_reports.append(impact_report)
             for outcome_uri in row[row.index[outcome_indicator_col_i:]].dropna().values.tolist():
