@@ -41,7 +41,7 @@ class TestExcelOrganizations(unittest.TestCase):
         org = utils.global_db['http://www.testURI.com/ABC123']
         self.assertEqual(org['is_a'], 'cids.Organization')
         self.assertEqual(org['ID'], 'http://www.testURI.com/ABC123')
-        self.assertEqual(org['org.hasLegalName'], ['Organization Name Value'])
+        self.assertEqual(org['org.hasLegalName'], 'Organization Name Value')
         self.assertEqual(org['cids.hasImpactModel'], ['http://www.testURI.com/main-impactmodel'])
 
 
@@ -51,7 +51,7 @@ class TestExcelOrganizations(unittest.TestCase):
         im = utils.global_db['http://www.testURI.com/main-impactmodel']
         self.assertEqual(im['ID'], 'http://www.testURI.com/main-impactmodel')
         self.assertEqual(im['is_a'], 'cids.LogicModel')
-        self.assertEqual(im['cids.hasName'], ['Impact Model'])
+        self.assertEqual(im['cids.hasName'], 'Impact Model')
         self.assertEqual(im['cids.hasProgram'], ['http://www.testURI.com/loan-program'])
 
 
@@ -61,7 +61,7 @@ class TestExcelOrganizations(unittest.TestCase):
         program = utils.global_db['http://www.testURI.com/loan-program']
         self.assertEqual(program['ID'], 'http://www.testURI.com/loan-program')
         self.assertEqual(program['is_a'], 'cids.Program')
-        self.assertEqual(program['cids.hasName'], ['Loans Program'])
+        self.assertEqual(program['cids.hasName'], 'Loans Program')
         self.assertEqual(program['cids.hasService'], ['http://www.testURI.com/loan-service'])
 
     def test_load_service(self):

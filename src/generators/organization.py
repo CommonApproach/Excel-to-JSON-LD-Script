@@ -21,7 +21,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
                 klass = klass,
                 props={
                     'ID'                : f'{base_uri}/{base_id}',
-                    'org.hasLegalName'  : [base_name],
+                    'org.hasLegalName'  : base_name,
                 }
             )
     else:
@@ -29,7 +29,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
             klass = klass,
             props={
                 'ID'                : f'{base_uri}/{base_id}',
-                'org.hasLegalName'  : [base_name],
+                'org.hasLegalName'  : base_name,
             }
         )
 
@@ -37,7 +37,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
         klass = 'cids.LogicModel',
         props = {
             'ID'            : f'{base_uri}/main-impactmodel',
-            'cids.hasName'   : ['Impact Model'],
+            'cids.hasName'   : 'Impact Model',
         }
     )
     organization['cids.hasImpactModel'].append(im['ID'])
@@ -46,7 +46,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
         klass = 'cids.Program',
         props = {
             'ID'            : f'{base_uri}/loan-program',
-            'cids.hasName'   : ['Loans Program'],
+            'cids.hasName'   : 'Loans Program',
         }
     )
     im['cids.hasProgram'].append(program['ID'])
