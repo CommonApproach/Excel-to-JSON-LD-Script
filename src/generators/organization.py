@@ -17,18 +17,27 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
     if row is None:
         organization = search_instances(klass='cids.Organization', how='first')
         if organization is None:
-            organization = generate_organization(row={
-                'ID'                : f'{base_uri}/{base_id}',
-                'org.hasLegalName'  : base_name,
-            })
+            organization = get_instance(
+                klass = klass,
+                props={
+                    'ID'                : f'{base_uri}/{base_id}',
+                    'org.hasLegalName'  : [base_name],
+                }
+            )
     else:
-        organization = generate_organization(row=row)
+        organization = get_instance(
+            klass = klass,
+            props={
+                'ID'                : f'{base_uri}/{base_id}',
+                'org.hasLegalName'  : [base_name],
+            }
+        )
 
     im = get_instance(
         klass = 'cids.LogicModel',
         props = {
             'ID'            : f'{base_uri}/main-impactmodel',
-            'cids.hasName'   : 'Impact Model',
+            'cids.hasName'   : ['Impact Model'],
         }
     )
     organization['cids.hasImpactModel'].append(im['ID'])
@@ -37,7 +46,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
         klass = 'cids.Program',
         props = {
             'ID'            : f'{base_uri}/loan-program',
-            'cids.hasName'   : 'Loans Program'
+            'cids.hasName'   : ['Loans Program'],
         }
     )
     im['cids.hasProgram'].append(program['ID'])
@@ -46,7 +55,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
         klass = 'cids.Service',
         props = {
             'ID'            : f'{base_uri}/loan-service',
-            'cids.hasName'   : 'Loans Service'
+            'cids.hasName'   : 'Loans Service',
         }
     )
     program['cids.hasService'].append(service['ID'])
@@ -55,7 +64,7 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
     activity = search_instances(klass='cids.Activity', how='first')
     if activity is None:
         activity = get_instance(
-            klass = 'cids.Actvity',
+            klass = 'cids.Activity',
             props = {
                 'ID'            : f'{base_uri}/loan-application-review',
                 'cids.hasName'   : 'Loans Application review',
@@ -67,10 +76,10 @@ def generate_organization(row=None, klass='cids.Organization', input_path='./dat
     output = search_instances(klass='cids.Output', how='first')
     if output is None:
         output = get_instance(
-            klass = 'cids.Service',
+            klass = 'cids.Output',
             props = {
                 'ID'            : f'{base_uri}/loan-application-review-output',
-                'cids.hasName'   : 'Loan Applcation Review Output'
+                'cids.hasName'   : 'Loan Applcation Review Output',
             }
         )
     activity['cids.hasOutput'].append(output['ID'])

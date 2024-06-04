@@ -1,6 +1,5 @@
 import pandas as pd
 from .generators.organization import generate_organization
-from .generators.organization import generate_organization
 from .generators.indicator import generate_indicator
 from .generators.indicator_report import generate_indicator_report
 from .generators.output import generate_output

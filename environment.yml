@@ -6,8 +6,10 @@ channels:
 dependencies:
   - python==3.9
   - pandas==1.4.2
+  - numpy=1.24
   - tqdm
   - rdflib
+  - pip
   - pip:
     - Owlready2==0.36
     - openpyxl==3.0.9

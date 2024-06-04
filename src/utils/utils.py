@@ -118,8 +118,8 @@ def get_instance_label(klass, uuid_inst=None):
     :param uuid_inst: uuid instance, e.g. from uuid.uuid4()
     :return string value of instance label
     """
-    if uuid_inst is None:
-        warnings.warn(f"No ID provided: {klass}") # BB
+    # if uuid_inst is None:
+    #     warnings.warn(f"No ID provided: {klass}") # BB
     return None
 
 def build_index(batch_count=os.cpu_count()):
@@ -332,8 +332,8 @@ def get_instance(klass=None,nm=PREFIX, inst_id=None, props={}):
         inst['is_a'] = klass
         if inst_id is None and 'ID' in inst.keys():
             inst_id = inst['ID']
-        if inst_id is None:
-            warnings.warn(f"No ID provided: {inst}") # BB
+        # if inst_id is None:
+        #     warnings.warn(f"No ID provided: {inst}") # BB
 
         for prop,val in properties.items():
             if val is None: continue       
@@ -360,9 +360,9 @@ def get_instance(klass=None,nm=PREFIX, inst_id=None, props={}):
                 print(inst_id, prop, val)
                 print(e)
                 raise(e)
-    if inst_id is None:
-        # Something went wrong. Display data and throw exception.
-        warnings.warn(f"No ID provided: {inst}") # BB
+    # if inst_id is None:
+    #     # Something went wrong. Display data and throw exception.
+    #     warnings.warn(f"No ID provided: {inst}") # BB
 
     update_db_index(inst)
     return inst
@@ -377,8 +377,8 @@ def get_blank_instance(klass, inst_id, nm=PREFIX):
     :return inst: instance label
     '''
     uuid_inst = uuid.uuid4()
-    if inst_id is None:
-        warnings.warn(f"No ID provided: {inst}") # BB
+    # if inst_id is None:
+    #     warnings.warn(f"No ID provided: {inst}") # BB
 
     inst = ObjectDict(lambda:PropertyList())
     if inst_id: inst['ID'] = inst_id
@@ -453,6 +453,7 @@ def resolve_nm(val, drop_prefix=True):
             matched_uri = url_regex.match(iri)
             if not matched_uri:
                 res = re.sub(r'^(.*):', '', iri)
+
     return res
 
 def default_to_regular(d):
@@ -501,7 +502,8 @@ def row_to_jsonld(inst, prop_ranges={}, context=True):
             continue
         vals_raw = []
         vals_dict = []
-        if not isinstance(vals,(PropertyList,list)):
+        org_list = isinstance(vals,(PropertyList,list))
+        if not org_list:
             vals = [vals]
 
         for val in vals:
@@ -526,7 +528,10 @@ def row_to_jsonld(inst, prop_ranges={}, context=True):
             elif Thing in ranges and isinstance(val, (PropertyList, dict)): o = row_to_jsonld(val, prop_ranges=prop_ranges, context=False)
             elif isinstance(val, (PropertyList, dict)): o = row_to_jsonld(val, prop_ranges=prop_ranges, context=False)
             else:                   o = str(val)
-            object[resolve_nm(prop)].append(o)
+            if org_list:
+                object[resolve_nm(prop)].append(o)
+            else:
+                object[resolve_nm(prop)] = o
     return object
 
 
@@ -536,14 +541,12 @@ def row_to_jsonld(inst, prop_ranges={}, context=True):
 
 
 
-def save_db_as_json(filename='global_db.json', dict_db=None) -> None:
+def db_to_json(dict_db=None) -> dict:
     """
-    Save global_db as .json file.
-    :param filename: Filename where the josn will be stored.
-    :type  filename: str
+    Generate dictionary for JSON.
     :param dict_db: If not None, use this dictionary as input instead of th global dict global_db.
     :type  dict_db: dict, optional
-    :return: None
+    :return: objects: dict
     """
     global global_db
     if dict_db is None:
@@ -559,6 +562,18 @@ def save_db_as_json(filename='global_db.json', dict_db=None) -> None:
         d = row_to_jsonld(inst, prop_ranges=prop_ranges|prop_ranges_preset)
         
         objects.append(d)
+    return objects
+
+def save_db_as_json(filename='global_db.json', dict_db=None) -> None:
+    """
+    Save global_db as .json file.
+    :param filename: Filename where the josn will be stored.
+    :type  filename: str
+    :param dict_db: If not None, use this dictionary as input instead of th global dict global_db.
+    :type  dict_db: dict, optional
+    :return: None
+    """
+    objects = db_to_json(dict_db=dict_db)
     with open(filename,"w") as f:
         json.dump(objects,f)
 

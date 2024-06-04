@@ -79,7 +79,7 @@ for prefix, url in namespaces.items():
 
 
 # some properties in OwlReady2 don't show the range type. This overwrites any that are found in the ontology.
-# usage in uti;l.save_db() and util.row_to_turtle()
+# usage in util.save_db() and util.row_to_turtle()
 prop_ranges_preset = {
     cids.hasDescription:[str],
     cids.hasName:[str],

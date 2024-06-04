@@ -5,7 +5,7 @@ if os.path.exists(LOG_FILE):
 if not os.path.exists('./output/'):
     os.makedirs('./output/')
 
-INPUT_FILE = './data/ExceltoJSONTemplate.xlsx'
+INPUT_FILE = './data/ExceltoJSONTemplate-sub.xlsx'
 CIDS_URL = 'http://ontology.commonapproach.org/owl/cids_v2.1.owl'
 CONTEXT_PATH = "https://ontology.commonapproach.org/contexts/cidsContext.json"
 REPLACE_PREFIX = 'context_only' # options: 'context_only', 'label_only', 'all', 'none'
@@ -33,10 +33,6 @@ warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
     with cids:
-        # process CIDS ontology
-        import_cids()
-        
-
         # Extract: load_data and map to right mapping columns
         _=load_uris(input_path=INPUT_FILE)
         _ = generate_organization(input_path=INPUT_FILE)
