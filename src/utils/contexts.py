@@ -1,6 +1,14 @@
 import urllib.request
 import re, warnings, json
 def rename_prefixes(contexts, prefixes):
+    """
+    Renames a prefix based on URI.
+    :param: context: dictionary of contexts.
+    :type context: dict
+    :param: prefixes: dictionary of prefixes to be updated.
+    :type prefixes: dict
+    :returns: contexts
+    """
     for k, v in contexts.items():
         for kk,vv in v.items():
             vv_match = re.match(r'^(.+):(.+)$', vv)
@@ -12,6 +20,14 @@ def rename_prefixes(contexts, prefixes):
     return contexts
 
 def load_context_mapping(path, replace_prefixes=False):
+    """
+    Recusevly loads context files and defines contexts to replace properties in JSON output file.
+    :param: path: URL to the base context file.
+    :type path: str
+    :param: replace_prefixes: A boolean whther prefixes should be replaced.
+    :type prefixes: bool
+    :returns: context_dict, prefix_dict
+    """
     context_dict = {}
     prefix_dict = {}
     with urllib.request.urlopen(path) as url:
@@ -47,8 +63,8 @@ def load_context_mapping(path, replace_prefixes=False):
                 context_dict = dict(list(new_dict.items()) + list(context_dict.items()))
                 prefix_dict = dict(list(new_prefix.items()) + list(prefix_dict.items()))
             else:
-                warnings.warn(f"Found invalid context entry in {path}") # BB
-                warnings.warn(f"Skipping context entry: {entry}") # BB
+                warnings.warn(f"Found invalid context entry in {path}")
+                warnings.warn(f"Skipping context entry: {entry}")
     if replace_prefixes:
         context_dict = rename_prefixes(contexts=context_dict, prefixes=prefix_dict)
     return context_dict, prefix_dict

@@ -5,6 +5,9 @@ import warnings
 
 from .utils.utils import get_instance, search_instances, PropertyList, ObjectDict, resolve_nm
 
+"""
+The <mappings> dictionary stores mappgins between Class properties in the Excel file and those in CIDS.
+"""
 mappings = {
     'Measure'   : {
         'Unit_of_measure'   : 'i72.hasUnit',
@@ -49,12 +52,14 @@ mappings = {
 class_list_properties = {
     'Output'        : ['UsedbyIndicator']
 }
-indicator_report_mapping = {}
-organization_mapping = {}
-output_mapping = {}
-
 
 def load_indicators(input_path='./data/input.xlsx'):
+    """
+    Creates Indicators and related classes from Excel file.
+    :param input_path: path to inptu Excel sheet.
+    :type input_path: str
+    :returns: list: List of Indicator instances created.
+    """
     organization = search_instances(klass='cids.Organization', how='first')
     if organization is None:
         raise("No organization found")
@@ -66,15 +71,12 @@ def load_indicators(input_path='./data/input.xlsx'):
     base_uri = tmp_data[tmp_data[0]=='Base URI'].iloc[0][1]
     base_uri = resolve_nm(base_uri)
 
-    # we ave one service to which all outcomes and outputs will be added.
+    # we have one service to which all outcomes and outputs will be added.
     indicator_output = search_instances(klass='cids.Output', how='first')
 
     # Row indexes
     # Indicator starting row
     indicator_row_i = 2
-    # SDG Outcome Indicator starting row
-    # sdg_indicator_row_i = df[df['IndicatorURI'] == 'Outcome URI'].iloc[0].name
-    # sdg_indicator_row_i = []
 
     # Column indexes
     range_row = df.iloc[0]
@@ -88,12 +90,15 @@ def load_indicators(input_path='./data/input.xlsx'):
     
     # theme = None
     indicators = []
-    for idx, row in df.iloc[indicator_row_i:].iterrows():
+    for _, row in df.iloc[indicator_row_i:].iterrows():
         if not pd.isnull(row['IndicatorURI']):
+            # create instance of Indicator
             indicator_id = resolve_nm(row['IndicatorURI'])
             indicator_name = row['Indicator Names']
 
             indicator = get_instance(klass='cids.Indicator', props={'ID':indicator_id, 'cids.hasName':indicator_name})
+
+            # create base Measure for teh indicator, if value exists
             if not pd.isnull(row.get('Base')):
                 base_measure = get_instance(klass='i72.Measure')
                 base_measure['i72.numerical_value'] = row.get('Base')
@@ -106,6 +111,7 @@ def load_indicators(input_path='./data/input.xlsx'):
                     warnings.warn(f"No Indicator Output provided")
 
 
+            # For each Indicator value, create a corresponding Indicator Report instance
             for col in indicator_value_cols:
                 if col+'.1' in row.index and not pd.isnull(row[col]):
                     indicator_report_id = resolve_nm(row[col+'.1'])
@@ -116,6 +122,8 @@ def load_indicators(input_path='./data/input.xlsx'):
                     measure['i72.numerical_value'] = row[col]
                     indicator_report['i72.value'] = measure
                     indicator['cids.hasIndicatorReport'].append(indicator_report['ID'])
+
+            # For each Indicator target value, create a corresponding Impact Report instance
             impact_reports = []
             for col in indicator_target_cols:
                 if col+'.1' in row.index and not pd.isnull(row[col]):
@@ -127,6 +135,8 @@ def load_indicators(input_path='./data/input.xlsx'):
                     impact_report = get_instance(klass='cids.ImpactReport', props={'ID':impact_report_id, 'cids.hasName': impact_report_name})
                     impact_report['cids.hasExpectation'] = measure
                     impact_reports.append(impact_report)
+
+            # For each OutcomreIndicator, associate an Outcome with the Indicator.
             for outcome_uri in row[row.index[outcome_indicator_col_i:]].dropna().values.tolist():
                 outcome_uri = resolve_nm(outcome_uri)
                 outcome = search_instances(klass='cids.Outcome', props={'ID':outcome_uri}, how='first')
@@ -144,7 +154,7 @@ def load_indicators(input_path='./data/input.xlsx'):
 
     return indicators
 
-
+# To epxlictly define the range and restrictions of a class property, the <restrictions> dictionary is used.
 restrictions = {
     'cids.Organization' : {
         'org.hasLegalName':'one',
@@ -182,6 +192,14 @@ restrictions = {
     }
 }
 def load_uris(input_path='./data/input.xlsx'):
+    """
+    Creates Class instances found in the input Excel file.
+    For any Organizaiton instances found, all Indicator and Outcome instances are explicitly 
+    associated with the Organization instances via cids:hasIndicator and cids:hasOutcome, respectively.
+    :param input_path: path to inptu Excel sheet.
+    :type input_path: str
+    :returns: list: List of class instances created.
+    """
     xls = pd.ExcelFile(input_path)
     sheet_name = 'Additional URIs - formatted'
     df = pd.read_excel(xls,sheet_name, header=None)

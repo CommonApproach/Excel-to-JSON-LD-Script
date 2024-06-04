@@ -6,6 +6,7 @@ if not os.path.exists('./output/'):
     os.makedirs('./output/')
 
 INPUT_FILE = './data/ExceltoJSONTemplate-sub.xlsx'
+OUTPUT_FILE = './output/output.json'
 CIDS_URL = 'http://ontology.commonapproach.org/owl/cids_v2.1.owl'
 CONTEXT_PATH = "https://ontology.commonapproach.org/contexts/cidsContext.json"
 REPLACE_PREFIX = 'context_only' # options: 'context_only', 'label_only', 'all', 'none'
@@ -21,8 +22,6 @@ exec(f"from .utils.namespaces import {','.join([nm for nm in namespaces.keys() i
 from owlready2 import Thing, ThingClass, DataPropertyClass
 
 
-from .load_ontology import import_cids
-from .generate_data import generate_data
 from .export_data import export_json
 from .map_data import load_indicators, load_uris
 from .generators.organization import generate_organization
@@ -38,5 +37,5 @@ if __name__ == '__main__':
         _ = generate_organization(input_path=INPUT_FILE)
         _=load_indicators(input_path=INPUT_FILE)
 
-        # Load: export data to JSON
-        export_json()
+        # export data to JSON
+        export_json(out_path=OUTPUT_FILE)

@@ -21,7 +21,6 @@ from src.utils.contexts import load_context_mapping
 __main__.MAPPING_CONTEXT, _ = load_context_mapping(path=__main__.CONTEXT_PATH)
 
 from src.utils.namespaces import prop_ranges_preset
-from src.load_ontology import import_cids
 from src.utils import utils
 
 
