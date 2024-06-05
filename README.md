@@ -47,7 +47,7 @@ Update the input file defined by ``INPUT_FILE``.
     - If a Program instance is provided in the URIs sheet, the default one is still used.
     - If a Service instances is provided in the URIs sheet, the default one is still used.
  
- - To epxlictly define the range and restrictions of a class property, the `restrictions` dictionary in [src/utils/map_data.py](src/utils/map_data.py) is used.
+ - To epxlictly define the range and restrictions of a class property, the `restrictions` dictionary in [./src/map_data.py](./src/map_data.py) is used.
 
  Main flow of the program is the following:
  - main.py
