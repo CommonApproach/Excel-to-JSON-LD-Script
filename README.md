@@ -1,7 +1,7 @@
 # excel-to-json-etl
 
 # User Guide
-An accompanying user guide is available at [https://docs.google.com/document/d/18cf9U0qSPfR849k8eRiQcrqe2Hlu7OjhEiMKvG0k-jc/edit]
+An accompanying user guide is available at [https://www.commonapproach.org/wp-content/uploads/2024/07/Guide-for-Excel-to-JSON-ETL-data-utility.pdf]
 
 # Input Data
 Input CSV/Excel files are stored in the [./data](data) folder.
